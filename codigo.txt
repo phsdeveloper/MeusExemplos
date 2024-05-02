@@ -1,0 +1,129 @@
+/// <summary>
+		/// Valida o CPF. Se o CPF for valido retorna true caso contrario false
+		/// </summary>
+		/// <param name="p_CPF"></param>
+		/// <returns></returns>
+		public bool MTD_ValidarCPF(string p_CPF)
+		{
+
+		    p_CPF = p_CPF.Replace(".", "").Replace("-", "");
+
+		    byte Numero;
+		    byte Resto;
+		    byte Dv1;
+		    byte Dv2;
+		    int Total;
+		    int Soma;
+
+		    if (p_CPF.Length == 11)
+		    {
+			  Total = 0;
+			  Soma = 0;
+
+			  for (byte i = 1; i <= 9; i++)
+			  {
+				try
+				{
+				    Numero = byte.Parse(p_CPF[i - 1].ToString());
+				}
+				catch (Exception ex)
+				{
+				    Numero = 0;
+				}
+
+				Total = Total + (Numero * (11 - i));
+				Soma = Soma + Numero;
+			  }
+			  int x = Total % 11;
+			  Resto = byte.Parse(x.ToString());
+
+			  if (Resto > 1)
+			  {
+				int y = 11 - Resto;
+				Dv1 = byte.Parse(y.ToString());
+			  }
+			  else
+			  {
+				Dv1 = 0;
+			  }
+
+			  Total = Total + Soma + 2 * Dv1;
+
+			  int z = Total % 11;
+			  Resto = byte.Parse(z.ToString());
+
+			  if (Resto > 1)
+			  {
+				int h = 11 - Resto;
+				Dv2 = byte.Parse(h.ToString());
+			  }
+			  else
+			  {
+				Dv2 = 0;
+			  }
+
+			  if ((p_CPF.Equals("11111111111")) || (p_CPF.Equals("22222222222")) || (p_CPF.Equals("33333333333")) ||
+				(p_CPF.Equals("44444444444")) || (p_CPF.Equals("55555555555")) || (p_CPF.Equals("66666666666")) ||
+				(p_CPF.Equals("77777777777")) || (p_CPF.Equals("88888888888")) || (p_CPF.Equals("99999999999")) ||
+				(p_CPF.Equals("00000000000")))
+			  {
+				return false;
+			  }
+
+			  if ((Dv1.ToString() == p_CPF[9].ToString()) & (Dv2.ToString() == p_CPF[10].ToString()))
+			  {
+				return true;
+			  }
+			  else
+			  {
+				return false;
+			  }
+		    }
+		    else
+		    {
+			  return false;
+		    }
+
+		}
+
+
+
+
+
+        //-------------validacao de CNPJ---------------------------------
+
+
+
+        //TODO: Testar para ver se esse metodo Funciona mesmo
+                    string cnpj = valor;
+                    int[] multiplicador1 = new int[12] { 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
+                    int[] multiplicador2 = new int[13] { 6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
+                    int soma;
+                    int resto;
+                    string digito;
+                    string tempCnpj;
+                    cnpj = cnpj.Trim();
+                    cnpj = cnpj.Replace(".", "").Replace("-", "").Replace("/", "");
+                    if (cnpj.Length != 14)
+                        retorno = false;
+                    tempCnpj = cnpj.Substring(0, 12);
+                    soma = 0;
+                    for (int i = 0; i < 12; i++)
+                        soma += int.Parse(tempCnpj[i].ToString()) * multiplicador1[i];
+                    resto = (soma % 11);
+                    if (resto < 2)
+                        resto = 0;
+                    else
+                        resto = 11 - resto;
+                    digito = resto.ToString();
+                    tempCnpj = tempCnpj + digito;
+                    soma = 0;
+                    for (int i = 0; i < 13; i++)
+                        soma += int.Parse(tempCnpj[i].ToString()) * multiplicador2[i];
+                    resto = (soma % 11);
+                    if (resto < 2)
+                        resto = 0;
+                    else
+                        resto = 11 - resto;
+                    digito = digito + resto.ToString();
+                    retorno = cnpj.EndsWith(digito);
